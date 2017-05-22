@@ -1,0 +1,35 @@
+---First query - verify problem exists---
+--Duplicate CRC meters count:
+
+
+select pducrcnum, count(*) from centralservices.rfendpointproperties
+where pducrcnum in (4480,21504,48440,59808,63672)
+group by pducrcnum;
+
+
+
+
+--Duplicate CRC's: 
+
+select PDUCRCNUM, metermodelid, count(*) from centralservices.meterconfigpducrc
+group by PDUCRCNUM, metermodelid
+having count(*) > 1;
+
+ 
+select * from meterconfigpducrc where pducrcnum in (4480,21504,48440,59808,63672);
+
+-----Second Query - Gives counts--
+
+
+select e.endpointid,e.serialnumber,e.statuscodeid,emc.*, mp.meterProgramCRC, mpf.meterProgramFactorCRC, mc.meterConfigIntervalDataCRC
+from EndpointMeterConfiguration emc inner join MeterPrograms mp on emc.meterProgramId = mp.meterProgramId 
+inner join MeterProgramFactors mpf on emc.meterProgramFactorId = mpf.meterProgramFactorId 
+inner join MeterConfiguration mc on emc.meterConfigurationId = mc.meterConfigurationId
+inner join EndPoints e on e.endPointId = emc.endpointId
+inner JOIN rfendpointproperties ep ON ep.endpointid = e.endpointid
+--inner JOIN METERCONFIGPDUCRC mccrc ON mccrc.pduCrcNum = ep.pduCrcNum
+--inner join meters ms on ms.meterid=e.meterid
+where mp.meterprogramid=25 and e.endpointid in( ); 
+
+
+--

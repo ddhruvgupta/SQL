@@ -1,0 +1,11 @@
+Delete seedfile from backend 
+
+select * from firmware where firmwaretypeid = 17;
+delete from firmware where firmwareid = <firmwareid>
+
+select endpointid, statuscodeid from endpoints ep join STATUSCODES sc on ep.statuscodeid = sc  where endpointid = 29 
+
+
+delete from stagededlconfigdata where firmwareid in (select firmwareid from firmware where firmwaretypeid = 17 and firmwareid > 100)
+
+delete from firmware  where firmwaretypeid = 17 and firmwareid > 100 
