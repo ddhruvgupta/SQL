@@ -1,0 +1,5 @@
+select CAST(logTime as date) AS ForDate, datepart(hour,logTime),datepart(hour,logTime)-5 as EasternTime,count(*) as meterCount
+from IDReadingLogs
+where logtime > '2017-05-20' and packettypeid = 8
+group by CAST(logTime as date),datepart(hour,logTime)
+order by 1,2;
