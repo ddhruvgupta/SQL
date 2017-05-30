@@ -1,0 +1,18 @@
+select * from (
+      select m.meterno
+             ,e.endpointid,
+             cl.issued as Issued_Time,  
+             cr.responsedatetime, 
+             ct.name as Command_Type,
+             CASE WHEN cr.responsedatetime >= cl.issued and cr.responsedatetime <=  dateadd(minute,10,cl.issued) THEN 'True' ELSE 'False' END AS ISSUCCESSFUL 
+      from endpoints e 
+            inner join commandlog cl on cl.endpointid = e.endpointid
+            inner join meters m on m.meterid = e.meterid
+            inner join commandtypes ct on ct.commandtypeid = cl.commandtypeid
+            inner join commandresponse cr on cr.commandlogid = cl.commandlogid
+            inner join commandssent cs on cs.commandlogid = cl.commandlogid
+      where cl.commandtypeid = 153 and cl.issued > '24-APR-2017 11:00:00'
+
+    ) as test
+--where test.ISSUCCESSFUL = 'False'
+;
