@@ -1,0 +1,51 @@
+DECLARE
+EPID endpoints.endpointid%TYPE;
+SNO ENDPOINTS.SERIALNUMBER%TYPE;
+MNO METERS.METERNO%type;
+HCOUNT RFENDPOINTPROPERTIES.LAYER%TYPE;
+BESTNID RFENDPOINTPROPERTIES.BESTNEIGHBORENDPOINTID%TYPE;
+BESTSNO ENDPOINTS.SERIALNUMBER%TYPE;
+BESTMNO METERS.METERNO%type;
+ISCOLL NUMBER;
+V_SPUID ENDPOINTS.SPUID%type; 
+
+CURSOR c1 IS SELECT ENDPOINTID FROM endpoints where spuid = 9 and ENDPOINTTYPEID = 9;
+BEGIN
+DBMS_OUTPUT.PUT_LINE (  'endpointId' || chr(9) || 'serialNumber' || chr(9) || 'meterNo' || chr(9) ||
+                        'hopCount' || chr(9) || 'bestNeighborEndpointId' || chr(9) || 'bestNeighborSerialNumber' || chr(9) ||
+                        'bestNeighborMeterNo' || chr(9) || 'isNextNeighborACollector' || chr(9) || 'collectorId');
+FOR item IN c1 
+LOOP
+  for c2 in
+    (SELECT e.endpointId,
+       e.serialNumber,
+       M.meterNo,
+       T.hopCount,
+       T.bestNeighborEndpointId,
+       T.serialNumber bestNeighborSerialNumber,
+       m1.meterNo bestNeighborMeterNo,
+       T.isNextNeighborACollector,
+       T.spuId collectorId
+    FROM (select rfd.EndpointId, bestNeighborEndpointId, level as hopcount ,CASE WHEN Ex.endpointmodelid = 65558 THEN 1 ELSE 0 END AS isNextNeighborACollector ,EX.METERID,EX.SPUID,EX.SERIALNUMBER
+          from RFEndpointProperties rfd
+          left join    endpoints ex ON RFD.BESTNEIGHBORENDPOINTID = Ex.ENDPOINTID  
+          where      level <= 40  
+          start with rfd.Endpointid = item.endpointid
+          connect by nocycle rfd.EndpointId = prior bestNeighborEndpointId and   prior ex.endpointmodelid != 65558
+          ) T
+    JOIN endpoints e 
+          ON e.endpointId = t.endpointId
+         JOIN meters M
+          ON e.meterid = M.meterid        
+         LEFT JOIN meters m1
+          ON T.METERID = m1.meterId)
+          
+          LOOP
+            DBMS_OUTPUT.PUT_LINE (C2.ENDPOINTID || chr(9) || c2.serialnumber || chr(9) || C2.meterno || chr(9) || 
+                                  c2.hopcount || chr(9) || c2.bestNeighborEndpointId || chr(9) || c2.serialNumber || chr(9) ||
+                                  c2.meterno || chr(9) || c2.isNextNeighborACollector || chr(9) || c2.collectorId || chr(10));
+          END LOOP;
+  END LOOP;
+END;
+/
+
