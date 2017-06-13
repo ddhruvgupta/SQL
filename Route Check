@@ -1,3 +1,5 @@
+set serveroutput on;
+
 DECLARE
 EPID endpoints.endpointid%TYPE;
 SNO ENDPOINTS.SERIALNUMBER%TYPE;
