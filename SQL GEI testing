@@ -16,3 +16,4 @@ select * from (
     ) as test
 --where test.ISSUCCESSFUL = 'False'
 ;
+--126 Endpoint Ping
