@@ -1,0 +1,10 @@
+All,
+You can use these two update statements against Central Services to clear collectors which are marked as outage when they shouldn’t be.
+
+It should work for both mesh and mesh ip but I have only tested on Mesh IP.  All you need to do is replace with the correct collector id.
+
+--Use to clear collector alerts if they are set incorrectly
+update collectoralerts2 set lastalertdate=NULL where systemmetricid=53 and collectorid=4
+update collectoralerts2 set lastalertdate=NULL where systemmetricid=62 and collectorid=4
+
+Thanks, James
