@@ -1,0 +1,1 @@
+select dbms_lob.substr(initpolldata, 1000,1) from rfuinitpolldata where endpointid = <endpointid>  
