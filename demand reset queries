@@ -1,0 +1,4 @@
+•         Select PrevDmdRstDTCrcNUM from rfendpointproperties where endpointid=(Select meterId from Meters where meterNo='$meterLANid')
+•         Select selfreaddmdrstsprtflg from rfendpointsproperties where endpointid=(Select meterId from Meters where meterNo='$meterLANid')
+•         Select * from unexpecteddmdrstdata where endpointid=(Select meterId from Meters where meterNo='$meterLANid')
+
