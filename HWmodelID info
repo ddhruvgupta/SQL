@@ -1,0 +1,7 @@
+SELECT EPM.endPointModelId, EPM.endPointTypeId, EPM.name, EPMF.name as EndpointModelFamilyName,EPM.DADeviceFLG,
+                coalesce(EPM.endPointModelFamilyId,EPM.endPointModelId) as endPointModelFamilyId,
+FP.majorHardwareVersion, EPM.minorHardwareVersion, COALESCE(EPM.softId, 0) as softId
+FROM EndPointModels EPM
+Left Join EndpointModelFamilies EPMF on EPM.endPointModelFamilyId = EPMF.endPointModelFamilyId
+Left Join FirmwarePlatforms FP on EPM .firmwarePlatformId = FP.firmwarePlatformId 
+where majorhardwareversion = 33
