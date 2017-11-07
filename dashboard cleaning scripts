@@ -1,0 +1,29 @@
+--Select validation
+select * from dbo.EndpointAlerts 
+where lastTimeSyncAlert is not null
+
+--Update the lastTimeSyncAlert field to null
+
+update dbo.EndpointAlerts
+set lastTimeSyncAlert = null
+where lastTimeSyncAlert is not null
+-------------------------------------------
+--Unexpected load side voltage 
+update EndpointAlerts2
+set alertDate = null
+where systemMetricId = 205
+and endpointId in (38,4193,79149,187620);
+
+---Temperature alert
+update EndpointAlerts
+set lastHotSocketAlert = null
+where endpointId = 196639;
+
+---Phase Errors
+--select validation
+select COUNT(*) from dbo.EndpointAlerts2
+where systemMetricId = 103;
+
+--delete query
+delete * from dbo.EndpointAlerts2
+where systemMetricId = 103
