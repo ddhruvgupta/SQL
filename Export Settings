@@ -1,0 +1,4 @@
+SELECT s.settingsid, s.enumname settingname, s.settingtypeid, t.settingtypename settingType, c.settingcategoryname, s.defaultvalue , COALESCE(SV.settingsvalue,OSV.settingsvalue,scsv.scrtygrpsttgsvalue) curValue, s.DescResourceKey description 
+FROM centralservices.dbo.settings S left outer join CENTRALSERVICES.dbo.settingcategories C ON s.settingcategoryid=c.settingcategoryid left outer join CENTRALSERVICES.dbo.settingtypes T ON s.settingtypeid=t.settingtypeid left JOIN centralservices.dbo.settingsvalues SV ON SV.settingsid = S.settingsid AND S.settingtypeid = 0 left JOIN centralservices.dbo.organizationsettingsvalues OSV on osv.settingsid = S.settingsid AND S.settingtypeid = 1 left JOIN centralservices.dbo.scrtyGrpSttgsValues SCSV ON SCSV.settingsID = S.settingsID AND S.settingtypeid = 3 
+WHERE (OSV.organizationid = 1 OR OSV.organizationid IS NULL) --AND S.settingtypeid IN (0,1) --AND S.settingtypeid >1 
+ORDER BY S.enumname; 
